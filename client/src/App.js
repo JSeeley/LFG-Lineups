@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Head from './components/Head.js'
 import ClassicHome from './components/classic/ClassicHome.js'
+import LFGClassicHome from './components/classic/LFGClassicHome.js'
 import CaptainHome from './components/captain/CaptainHome.js'
 import MondayCaptainHome from './components/captain/MondayCaptainHome.js'
 
@@ -62,6 +63,7 @@ function App() {
         <Head sdDate2={sdDate2} sdDow2={sdDow2} sdDate1={sdDate1} sdDow1={sdDow1} clDate={clDate} />
         <Routes>
           <Route exact path="/" element={<ClassicHome />}/>
+          <Route exact path="/LFG" element={<LFGClassicHome />}/>
           <Route exact path="/showdown1" element={<CaptainHome sdTeams1={sdTeams1} sdDate1={sdDate1} sdDow1={sdDow1} sdDate2={sdDate2} sdDow2={sdDow2} sdTeams2={sdTeams2} />}/>
           <Route exact path="/showdown2" element={<MondayCaptainHome sdTeams1={sdTeams1} sdDate1={sdDate1} sdDow1={sdDow1} sdDate2={sdDate2} sdDow2={sdDow2} sdTeams2={sdTeams2}/>}/>
         </Routes>
