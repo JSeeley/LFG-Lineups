@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@200;300&display=swap');
 
 .App {
-  background-color: #181a1f;
+  background-color: whitesmoke;
   text-align: center;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .ui.table {
-  background-color: #21232a !important;
+  background-color: white !important;
   font-family: Helvetica !important;
   color: #fafafa;
   letter-spacing: .35px !important;
