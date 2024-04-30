@@ -37,6 +37,11 @@
   height:38px;
 }
 
+.ui.fixed.table td{
+  overflow: visible !important;
+}
+
+
 .ui.table {
   background-color: white !important;
   font-family: Helvetica !important;
