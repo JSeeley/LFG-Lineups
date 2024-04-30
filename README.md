@@ -1,8 +1,8 @@
-# Optimize Daily
+# LFG Lineups
 <table>
   <tr>
     <td>
-Daily Fantasy Football lineup builder and optimizer application created with Node.js and React.js, featuring live DraftKings contest data and projections from Sleeper. Build DraftKings contest lineups manually from player queue or optimize with linear programming for the highest projected lineup given salary and position constraints. Updated weekly during the NFL season for the Sunday Classic and two Showdown contests.  
+A Draftkings Reignmaker lineup builder based off ashhhlynn's Optimize Daily: https://github.com/ashhhlynn/optimize-fantasy-football.
     </td>
   </tr>
 </table> 

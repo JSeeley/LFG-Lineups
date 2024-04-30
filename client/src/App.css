@@ -40,7 +40,7 @@
 .ui.table {
   background-color: white !important;
   font-family: Helvetica !important;
-  color: #fafafa;
+  color: black !important;
   letter-spacing: .35px !important;
 }
 

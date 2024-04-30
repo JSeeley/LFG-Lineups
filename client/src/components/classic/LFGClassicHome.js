@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import ClassicQueue from './ClassicQueue.js'
 import { Table, Button, Grid, Label, Icon, Modal, ModalContent, ModalActions, Loader } from 'semantic-ui-react'
+import LFGClassicQueue from './LFGClassicQueue.js'
 import ClassicLineupHeader from './ClassicLineupHeader.js'
-import ClassicLineup from './ClassicLineup.js'
+import LFGClassicLineup from './LFGClassicLineup.js'
 
 function CollectibleList() {
+
   const [collectibles, setCollectibles] = useState([]);
   const [RMSuperstars, setRMSuperstars] = useState([]);
   const [RMQbs, setRMQbs] = useState([]);
   const [RMRbs, setRMRbs] = useState([]);
   const [RMWrTes, setRMWrTes] = useState([]);
   const [RMFlexes, setRMFlexes] = useState([]);
+  const [qb, setQb] = useState()
+  const [rb, setRb] = useState()
+  const [wr, setWr] = useState()
+  // const [wrte, setWrTe] = useState()
+  // const [flex, setFlex] = useState()
+  const [lineupPlayers, setLineupPlayers] = useState([])
+  const [playerCount, setPlayerCount] = useState(9)
+  const [projection, setProjection] = useState(0)
+  const [open, setOpen] = useState(false)
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -125,26 +136,66 @@ function CollectibleList() {
     setRMFlexes(filteredFlexes);
   };
 
-const renderPlayerCells = (items) => {
-    return items.map((item) => (
-      <Table.Row key={item.collectibleKey}>
-        <Table.Cell style={{ textAlign: "center", borderBottom: ".05px", borderColor: "#fafafa" }}>
-          {item.rarityTier}
-        </Table.Cell>
-        <Table.Cell style={{ borderBottom: ".05px", borderColor: "#fafafa" }}>
-          {item.athleteName}
-        </Table.Cell>
-        <Table.Cell style={{ borderBottom: ".05px", borderColor: "#fafafa" }}>
-          <center>
-            <Icon style={{ cursor: "pointer" }} size="large" name="plus circle" />
-          </center>
-        </Table.Cell>
-      </Table.Row>
-    ));
-  };
+
+  const setPlayer = (player) => {
+    if (!lineupPlayers.find(p => p.athleteName === player.athleteName)) { 
+        if (player.position === "QB" && !qb ) {
+            setLineupData(player)
+            setQb(player)
+        }
+        else if (player.position === "RB" && !rb) {
+            setRb(player)
+            setLineupData(player)
+        }
+        else if (player.position === "WR" && !wr) {
+            setWr(player)
+            setLineupData(player)
+        }
+    }
+}
+
+const setLineupData = (player) => {     
+  // setProjection(projection + player.Projection)
+  setLineupPlayers(lineupPlayers => [...lineupPlayers, player])
+}
+
+
+const renderPlayerCells = (players) => {
+  return players.map((player) => (
+    <Table.Row key={player.collectibleKey}>
+      <Table.Cell style={{ textAlign: "center", borderBottom: ".05px", borderColor: "#fafafa" }}>
+        {player.rarityTier}
+      </Table.Cell>
+      <Table.Cell style={{ borderBottom: ".05px", borderColor: "#fafafa" }}>
+        {player.athleteName}
+      </Table.Cell>
+      <Table.Cell style={{ borderBottom: ".05px", borderColor: "#fafafa" }}>
+        <center>
+                  <Icon onClick={(event) => setPlayer(event, player)} style={{cursor:"pointer"}}  size="large" name="plus circle" />
+        </center>
+      </Table.Cell>
+    </Table.Row>
+  ));
+};
+
 
   return (
     <div>
+          <LFGClassicLineup 
+                            qb={qb}
+                            rb={rb}
+                            wr={wr}
+                            // flex={flex}
+                        />
+           <ClassicQueue 
+                            // sortMoney={sortMoney}
+                            // sortPos={sortPos}
+                            // sortProjection={sortProjection}
+                            // sortName={sortName}
+                            collectibles={collectibles}
+                            setPlayer={setPlayer}
+                            // sortFFPG={sortFFPG}
+                        />
          <Grid divider vert style={{marginTop:".5%"}}>
                 <Grid.Row columns={5}>
                     <Grid.Column>

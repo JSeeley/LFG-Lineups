@@ -4,7 +4,6 @@ import ClassicQueue from './ClassicQueue.js'
 import ClassicLineupHeader from './ClassicLineupHeader.js'
 import ClassicLineup from './ClassicLineup.js'
 
-// 
 
 function ClassicHome() {
 
@@ -163,7 +162,7 @@ function ClassicHome() {
         //     setSalaryPerPlayer(parseInt(s/(playerCount - 1)))
         // }
         // setSalary(s)
-        // setPlayerCount(playerCount - 1)
+        setPlayerCount(playerCount - 1)
     }
 
     const removePlayer = (player) => {
