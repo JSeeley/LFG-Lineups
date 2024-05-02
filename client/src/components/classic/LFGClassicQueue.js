@@ -42,7 +42,7 @@ function LFGClassicQueue(props) {
     
     const renderPlayerCells = (players) => {
         return players.map((player) => (
-          <Table.Row key={player.collectibleKey}>
+          <Table.Row key={player.uniquePlayerID}>
             <Table.Cell style={{ textAlign: "center", borderBottom: ".05px", borderColor: "#fafafa" }}>
               {player.rarityTier}
             </Table.Cell>

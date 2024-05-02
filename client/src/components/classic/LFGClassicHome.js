@@ -15,9 +15,12 @@ function CollectibleList() {
   const [qb, setQb] = useState()
   const [rb, setRb] = useState()
   const [wr, setWr] = useState()
+  const [wrte, setWrTe] = useState()
+  const [flex, setFlex] = useState()
   // const [wrte, setWrTe] = useState()
   // const [flex, setFlex] = useState()
-  const [lineupPlayers, setLineupPlayers] = useState([])
+  const [lineups, setLineups] = useState([{ id: 1, players: [] }]); // Initialize with lineupID = 1
+  const [lineupID, setLineupID] = useState(1);
   const [playerCount, setPlayerCount] = useState(9)
   const [projection, setProjection] = useState(0)
   const [open, setOpen] = useState(false)
@@ -43,8 +46,11 @@ function CollectibleList() {
       const position = positionAttribute ? positionAttribute.value : 'Unknown';
       const superstarAttribute = edition.collectibleAttributes.find(attr => attr.displayName === "SuperStar Status");
       const superstar = superstarAttribute ? superstarAttribute.value : 'Unknown';
+      const uniquePlayerID = `${edition.collectibleKey.substring(0, 8)}-${edition.collectibleKey.substring(8, 12)}-${edition.collectibleKey.substring(12, 16)}-${edition.collectibleKey.substring(16, 20)}-${edition.collectibleKey.substring(20)}+${edition.editionNumber}`;
+
 
       return {
+        uniquePlayerID: uniquePlayerID,
         collectibleKey: edition.collectibleKey,
         editionNumber: edition.editionNumber,
         athleteName: athleteName,
@@ -138,30 +144,79 @@ function CollectibleList() {
 
 
   const setPlayer = (player) => {
-    if (!lineupPlayers.find(p => p.athleteName === player.athleteName)) { 
-        if (player.position === "QB" && !qb ) {
-            setLineupData(player)
-            setQb(player)
+      if (player.position === "QB" && !qb ) {
+          setLineupData(player)
+          setQb(player)
+          removeQueuePlayer(player);
+      }
+      else if (player.position === "RB" && !rb) {
+          setRb(player)
+          setLineupData(player)
+          removeQueuePlayer(player);
+      }
+      else if (player.position === "WR" && !wr) {
+          setWr(player)
+          setLineupData(player)
+          removeQueuePlayer(player);
+      }
+        else if ((player.position === "WR" && !wrte) || (player.position === "TE" && !wrte)) {
+          setWrTe(player)
+          setLineupData(player)
+          removeQueuePlayer(player);
+          console.log("WR/TE added")
         }
-        else if (player.position === "RB" && !rb) {
-            setRb(player)
-            setLineupData(player)
+        else if ((player.position === "RB" || player.position === "WR" || player.position === "TE") && !flex) {
+          setFlex(player)
+          setLineupData(player)
+          removeQueuePlayer(player);
+          console.log("Flex added")
         }
-        else if (player.position === "WR" && !wr) {
-            setWr(player)
-            setLineupData(player)
-        }
-    }
+      else {
+        console.log("You already have a player in this position")
+      }
 }
 
 const setLineupData = (player) => {     
-  // setProjection(projection + player.Projection)
-  setLineupPlayers(lineupPlayers => [...lineupPlayers, player])
+  setLineups(lineups => [...lineups, player])
 }
 
+const addNewLineup = () => {
+  setLineups(currentLineups => [
+    ...currentLineups,
+    { id: currentLineups.length + 1, players: [] }  // Assuming lineup IDs are sequential
+  ]);
+}
+
+const removeQueuePlayer = (player) => {
+  // Update state to filter out the player added to the lineup from all relevant arrays
+  setRMQbs(prev => prev.filter(p => p.uniquePlayerID !== player.uniquePlayerID));
+  setRMRbs(prev => prev.filter(p => p.uniquePlayerID !== player.uniquePlayerID));
+  setRMWrTes(prev => prev.filter(p => p.uniquePlayerID !== player.uniquePlayerID));
+  setRMFlexes(prev => prev.filter(p => p.uniquePlayerID !== player.uniquePlayerID));
+  setRMSuperstars(prev => prev.filter(p => p.uniquePlayerID !== player.uniquePlayerID));
+};
 
 
+// const removePlayer = (player) => {
+//   removeLineupData(player)
+//   if (player.position === "QB") {
+//       setQb()
+//   }
+//   else if (player.position === "RB") {
+//       setRb()
+//   }
+//   else if (player.position === "WR") {
+//       setWr()
+//   }
+//   else if (player.position === "TE") {
+//       setTe()
+//   }
+// }
 
+// const removeLineupData = (player) => {
+//   let x = lineups.filter(f => f.playerId !== player.playerId)
+//   setLineupPlayers(x)
+// }
 
   return (
     <div>
@@ -169,8 +224,11 @@ const setLineupData = (player) => {
                             qb={qb}
                             rb={rb}
                             wr={wr}
-                            // flex={flex}
+                            wrte={wrte}
+                            flex={flex}
+                            // removePlayer={removePlayer}
                         />
+          <Button onClick={addNewLineup}>Add New Lineup</Button>
            <LFGClassicQueue 
                             // sortMoney={sortMoney}
                             // sortPos={sortPos}
@@ -185,15 +243,6 @@ const setLineupData = (player) => {
                             RMFlexes={RMFlexes}
                             // sortFFPG={sortFFPG}
                         />
-         
-      <h1>Collectible List</h1>
-      <ul>
-        {collectibles.map((item, index) => (
-          <li key={index}>
-            Key: {item.collectibleKey}, Number: {item.editionNumber}, Athlete: {item.athleteName}, Rarity: {item.rarityTier}, Position: {item.position}, SuperStar: {item.superstar}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

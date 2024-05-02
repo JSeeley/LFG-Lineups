@@ -169,6 +169,7 @@ function ClassicHome() {
         removeLineupData(player)
         if (player === flex[0]) {
             setFlex([])
+            console.log(flex)
         }  
         else if (player.position === "QB") {
             setQb()

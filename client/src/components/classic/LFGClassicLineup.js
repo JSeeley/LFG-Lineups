@@ -12,7 +12,8 @@ function ClassicLineup(props) {
     let qb = props.qb
     let rb = props.rb
     let wr = props.wr
-    // let flex = props.flex
+    let wrte = props.wrte
+    let flex = props.flex
 
     return (
         <>
@@ -22,6 +23,8 @@ function ClassicLineup(props) {
                     <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white",  backgroundColor:"#2e323c"}}>QB</Table.HeaderCell>
                     <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white",  backgroundColor:"#2e323c"}}>RB</Table.HeaderCell>
                     <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white", backgroundColor:"#2e323c"}}>WR</Table.HeaderCell>
+                    <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white", backgroundColor:"#2e323c"}}>WR/TE</Table.HeaderCell>
+                    <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white", backgroundColor:"#2e323c"}}>FLEX</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>           
@@ -37,7 +40,7 @@ function ClassicLineup(props) {
                     {rb ?  
                         <>
                         <Table.Cell>{rb.athleteName}</Table.Cell>
-                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, qb)}/></center></Table.Cell>
+                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, rb)}/></center></Table.Cell>
                         </>
                     :
                         <BlankCells/>
@@ -45,7 +48,23 @@ function ClassicLineup(props) {
                     {wr ?
                         <>
                         <Table.Cell>{wr.athleteName}</Table.Cell>
-                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, qb)}/></center></Table.Cell>
+                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, wr)}/></center></Table.Cell>
+                        </>
+                    :
+                        <BlankCells/>
+                    }
+                    {wrte ?
+                        <>
+                        <Table.Cell>{wrte.athleteName}</Table.Cell>
+                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, wrte)}/></center></Table.Cell>
+                        </>
+                    :
+                        <BlankCells/>
+                    }
+                    {flex ?
+                        <>
+                        <Table.Cell>{flex.athleteName}</Table.Cell>
+                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, flex)}/></center></Table.Cell>
                         </>
                     :
                         <BlankCells/>
