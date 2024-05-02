@@ -19,7 +19,7 @@ function CollectibleList() {
   const [flex, setFlex] = useState()
   // const [wrte, setWrTe] = useState()
   // const [flex, setFlex] = useState()
-  const [lineups, setLineups] = useState([{ id: 1, players: [] }]);
+  const [lineups, setLineups] = useState([{ id: 1, positions: { qb: null, rb: null, wr: null, wrte: null, flex: null } }]);
   const [lineupID, setLineupID] = useState(1);
   const [playerCount, setPlayerCount] = useState(9)
   const [projection, setProjection] = useState(0)
@@ -144,56 +144,63 @@ function CollectibleList() {
 
 
   const setPlayer = (player, lineupID) => {
-    if (lineups.some(l => l.id === lineupID && !l.players.find(p => p.uniquePlayerID === player.uniquePlayerID))) {
-      if (player.position === "QB" && !qb ) {
-          setLineupData(player, lineupID)
-          setQb(player)
+      const lineupIndex = lineups.findIndex(l => l.id === lineupID);
+      if (lineupIndex === -1) return; // Lineup not found
+    
+      const lineup = lineups[lineupIndex];
+
+          if (player.position === "QB" && !lineup.positions.qb) {
+          setLineupData(player, lineupID, 'qb');
           removeQueuePlayer(player);
+          console.log("QB added")
+
       }
-      else if (player.position === "RB" && !rb) {
-          setRb(player)
-          setLineupData(player, lineupID)
+      else if (player.position === "RB" && !lineup.positions.rb) {
+          setLineupData(player, lineupID, 'rb')
           removeQueuePlayer(player);
+          console.log("RB added")
       }
-      else if (player.position === "WR" && !wr) {
-          setWr(player)
-          setLineupData(player, lineupID)
+      else if (player.position === "WR" && !lineup.positions.wr) {
+          setLineupData(player, lineupID, 'wr')
           removeQueuePlayer(player);
+          console.log("WR added")
       }
-        else if ((player.position === "WR" && !wrte) || (player.position === "TE" && !wrte)) {
-          setWrTe(player)
-          setLineupData(player, lineupID)
+      else if ((player.position === "WR" || player.position === "TE") && !lineup.positions.wrte) {
+          setLineupData(player, lineupID, 'wrte')
           removeQueuePlayer(player);
           console.log("WR/TE added")
         }
-        else if ((player.position === "RB" || player.position === "WR" || player.position === "TE") && !flex) {
-          setFlex(player)
-          setLineupData(player, lineupID)
+        else if ((player.position === "RB" || player.position === "WR" || player.position === "TE") && !lineup.positions.flex) {
+          setLineupData(player, lineupID, 'flex')
           removeQueuePlayer(player);
           console.log("Flex added")
         }
       else {
         console.log("You already have a player in this position")
       }
-    }
 }
 
 useEffect(() => {
   console.log(lineups);
 }, [lineups]);
 
-const setLineupData = (player, lineupId) => {
+const setLineupData = (player, lineupId, positionKey) => {
   setLineups(currentLineups => currentLineups.map(lineup =>
-      lineup.id === lineupId ? { ...lineup, players: [...lineup.players, player] } : lineup
+      lineup.id === lineupId ? {
+          ...lineup,
+          positions: { ...lineup.positions, [positionKey]: player }
+      } : lineup
   ));
-}
+};
 
 const addNewLineup = () => {
+  const newId = lineups.length > 0 ? lineups[lineups.length - 1].id + 1 : 1;
   setLineups(currentLineups => [
-    ...currentLineups,
-    { id: currentLineups.length + 1, players: [] }  // Assuming lineup IDs are sequential
+      ...currentLineups,
+      { id: newId, positions: { qb: null, rb: null, wr: null, wrte: null, flex: null } }
   ]);
-}
+  setLineupID(newId);
+};
 
 const removeQueuePlayer = (player) => {
   // Update state to filter out the player added to the lineup from all relevant arrays
@@ -234,6 +241,7 @@ const removeQueuePlayer = (player) => {
                             wr={wr}
                             wrte={wrte}
                             flex={flex}
+                            lineups={lineups}
                             // removePlayer={removePlayer}
                         />
           <Button onClick={addNewLineup}>Add New Lineup</Button>

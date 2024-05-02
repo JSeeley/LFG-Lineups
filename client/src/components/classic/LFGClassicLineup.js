@@ -9,72 +9,45 @@ function ClassicLineup(props) {
         props.removePlayer(player)
     }
 
-    let qb = props.qb
-    let rb = props.rb
-    let wr = props.wr
-    let wrte = props.wrte
-    let flex = props.flex
+    const lineups = props.lineups
 
-    return (
-        <>
-        <Table fixed style={{borderColor:"white", color:"#fafafa", marginTop:"-2.5%", marginLeft:"2%", width:"1500px"}}>           
+    const getPositionHeaders = () => {
+        const allPositions = new Set();
+        lineups.forEach(lineup => {
+          Object.keys(lineup.positions).forEach(position => {
+            allPositions.add(position);
+          });
+        });
+        return Array.from(allPositions);
+      };
+    
+      return (
+        <div>
+          <Table celled>
             <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white",  backgroundColor:"#2e323c"}}>QB</Table.HeaderCell>
-                    <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white",  backgroundColor:"#2e323c"}}>RB</Table.HeaderCell>
-                    <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white", backgroundColor:"#2e323c"}}>WR</Table.HeaderCell>
-                    <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white", backgroundColor:"#2e323c"}}>WR/TE</Table.HeaderCell>
-                    <Table.HeaderCell style={{fontWeight:"normal", fontSize:"12px", letterSpacing: ".5px", color:"white", backgroundColor:"#2e323c"}}>FLEX</Table.HeaderCell>
-                </Table.Row>
+              <Table.Row>
+                <Table.HeaderCell>ID</Table.HeaderCell>
+                {getPositionHeaders().map(position => (
+                  <Table.HeaderCell key={position}>{position.toUpperCase()}</Table.HeaderCell>
+                ))}
+              </Table.Row>
             </Table.Header>
-            <Table.Body>           
-                <Table.Row>
-                    {qb ? 
-                        <>
-                        <Table.Cell>{qb.athleteName}</Table.Cell>
-                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, qb)}/></center></Table.Cell>
-                        </>
-                    :
-                        <BlankCells/>
-                    }
-                    {rb ?  
-                        <>
-                        <Table.Cell>{rb.athleteName}</Table.Cell>
-                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, rb)}/></center></Table.Cell>
-                        </>
-                    :
-                        <BlankCells/>
-                    }
-                    {wr ?
-                        <>
-                        <Table.Cell>{wr.athleteName}</Table.Cell>
-                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, wr)}/></center></Table.Cell>
-                        </>
-                    :
-                        <BlankCells/>
-                    }
-                    {wrte ?
-                        <>
-                        <Table.Cell>{wrte.athleteName}</Table.Cell>
-                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, wrte)}/></center></Table.Cell>
-                        </>
-                    :
-                        <BlankCells/>
-                    }
-                    {flex ?
-                        <>
-                        <Table.Cell>{flex.athleteName}</Table.Cell>
-                        <Table.Cell><center><Icon name="close" style={{cursor:"pointer"}} onClick={(event) => removePlayer(event, flex)}/></center></Table.Cell>
-                        </>
-                    :
-                        <BlankCells/>
-                    }
-                    
+            <Table.Body>
+              {lineups.map(lineup => (
+                <Table.Row key={lineup.id}>
+                  <Table.Cell>{lineup.id}</Table.Cell>
+                  {getPositionHeaders().map(position => (
+                    <Table.Cell key={position}>
+                      {lineup.positions[position] ? lineup.positions[position].athleteName : ''}
+                    </Table.Cell>
+                  ))}
                 </Table.Row>
-              </Table.Body>
-            </Table>
-        </>
-    )
-}
+              ))}
+            </Table.Body>
+          </Table>
+          {/* Other components and buttons */}
+        </div>
+      );
+    }
 
 export default ClassicLineup
