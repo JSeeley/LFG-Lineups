@@ -9,6 +9,7 @@ function LFGClassicQueue(props) {
   // const RMWrs = props.RMWrs
   const RMWrTes = props.RMWrTes
   const RMFlexes = props.RMFlexes
+  const lineupID = props.lineupID
 
     // const sortPos = (e) => {
     //     e.preventDefault()
@@ -35,9 +36,9 @@ function LFGClassicQueue(props) {
     //     props.sortName()
     // }
 
-    const setPlayer = (e, player) => {
+    const setPlayer = (e, player, lineupID) => {
         e.preventDefault()
-        props.setPlayer(player)
+        props.setPlayer(player, lineupID)
     }
     
     const renderPlayerCells = (players) => {
@@ -51,7 +52,7 @@ function LFGClassicQueue(props) {
             </Table.Cell>
             <Table.Cell style={{ borderBottom: ".05px", borderColor: "#fafafa" }}>
               <center>
-                        <Icon onClick={(event) => setPlayer(event, player)} style={{cursor:"pointer"}}  size="large" name="plus circle" />
+                        <Icon onClick={(event) => setPlayer(event, player, lineupID)} style={{cursor:"pointer"}}  size="large" name="plus circle" />
               </center>
             </Table.Cell>
           </Table.Row>

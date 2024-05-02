@@ -19,7 +19,7 @@ function CollectibleList() {
   const [flex, setFlex] = useState()
   // const [wrte, setWrTe] = useState()
   // const [flex, setFlex] = useState()
-  const [lineups, setLineups] = useState([{ id: 1, players: [] }]); // Initialize with lineupID = 1
+  const [lineups, setLineups] = useState([{ id: 1, players: [] }]);
   const [lineupID, setLineupID] = useState(1);
   const [playerCount, setPlayerCount] = useState(9)
   const [projection, setProjection] = useState(0)
@@ -143,41 +143,49 @@ function CollectibleList() {
   };
 
 
-  const setPlayer = (player) => {
+  const setPlayer = (player, lineupID) => {
+    if (lineups.some(l => l.id === lineupID && !l.players.find(p => p.uniquePlayerID === player.uniquePlayerID))) {
       if (player.position === "QB" && !qb ) {
-          setLineupData(player)
+          setLineupData(player, lineupID)
           setQb(player)
           removeQueuePlayer(player);
       }
       else if (player.position === "RB" && !rb) {
           setRb(player)
-          setLineupData(player)
+          setLineupData(player, lineupID)
           removeQueuePlayer(player);
       }
       else if (player.position === "WR" && !wr) {
           setWr(player)
-          setLineupData(player)
+          setLineupData(player, lineupID)
           removeQueuePlayer(player);
       }
         else if ((player.position === "WR" && !wrte) || (player.position === "TE" && !wrte)) {
           setWrTe(player)
-          setLineupData(player)
+          setLineupData(player, lineupID)
           removeQueuePlayer(player);
           console.log("WR/TE added")
         }
         else if ((player.position === "RB" || player.position === "WR" || player.position === "TE") && !flex) {
           setFlex(player)
-          setLineupData(player)
+          setLineupData(player, lineupID)
           removeQueuePlayer(player);
           console.log("Flex added")
         }
       else {
         console.log("You already have a player in this position")
       }
+    }
 }
 
-const setLineupData = (player) => {     
-  setLineups(lineups => [...lineups, player])
+useEffect(() => {
+  console.log(lineups);
+}, [lineups]);
+
+const setLineupData = (player, lineupId) => {
+  setLineups(currentLineups => currentLineups.map(lineup =>
+      lineup.id === lineupId ? { ...lineup, players: [...lineup.players, player] } : lineup
+  ));
 }
 
 const addNewLineup = () => {
@@ -241,6 +249,7 @@ const removeQueuePlayer = (player) => {
                             RMRbs={RMRbs}
                             RMWrTes={RMWrTes}
                             RMFlexes={RMFlexes}
+                            lineupID={lineupID}
                             // sortFFPG={sortFFPG}
                         />
     </div>
